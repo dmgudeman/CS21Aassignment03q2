@@ -54,17 +54,23 @@ def draw_cloud(input_count, min_length = 0):
 
 def count_words (filename):
     # build and return the dictionary for the given filename
+    words = {}
     with open(filename, 'r', encoding='utf-8') as raw_file:
 
         #raw_text = raw_file.read()
         for line in raw_file:
             for word in line.split():
                 word = word.lower()
-                word = "".join(c for c in word
-                             if c not in string.punctuation)
-                print(word)
+               # word = "".join(c for c in word
+                #             if c not in string.punctuation)
+                
+                if word in words:
+                    words[word]= words[word] + 1
+                else:
+                    words[word] = 1
 
-          #  print(line, end='')
+    print(words)
+
 def get_input():
     """
     # Obtain the input from the user
