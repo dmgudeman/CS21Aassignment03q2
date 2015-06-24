@@ -65,7 +65,17 @@ def count_words (filename):
                 print(word)
 
           #  print(line, end='')
-
+def get_input():
+    """
+    # Obtain the input from the user
+    # prompt the user for input until they enter a non-empty string
+    # return the string entered by the user
+     #
+    """
+    filename = str(input('Please enter the name of your file:'))
+    while filename == "":
+      filename = str(input('Please enter the name of your file:'))
+    return filename
 
 def report(word_dict):
     # report on various statistics based on the given word count dictionary
@@ -83,4 +93,5 @@ def main():
 
 if __name__ == '__main__':
     main()
-    count_words('spider.txt')
+    filename = get_input()
+    count_words(filename)
