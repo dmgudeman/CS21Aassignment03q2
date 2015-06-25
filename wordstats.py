@@ -16,6 +16,7 @@ import tkinter
 import tkinter.font
 import random
 import string
+import operator
 # The draw_cloud function is only needed for the optional part:
 # to generate a word cloud.
 # You don't need to change it.
@@ -63,13 +64,17 @@ def count_words (filename):
                 word = word.lower()
                # word = "".join(c for c in word
                 #             if c not in string.punctuation)
-                
+                word = ''.join(c for c in word if c.isalpha())
+
                 if word in words:
                     words[word]= words[word] + 1
                 else:
                     words[word] = 1
 
+            if words[word] == '':
+                null_deleter = words.pop(word, None) # gets rid of null strings
     print(words)
+    return words
 
 def get_input():
     """
@@ -85,7 +90,14 @@ def get_input():
 
 def report(word_dict):
     # report on various statistics based on the given word count dictionary
-    print("hi there")
+    longest_word = sorted (word_dict, key=len, reverse=True)
+    longest_word = longest_word[:1]
+    print("A longest word is '" + longest_word[0] + "'")
+
+    top_five = sorted(word_dict.items(), key=operator.itemgetter(1), reverse=True)
+    top_five = top_five[:5]
+    print(top_five)
+
 def main():
     # get the input filename and save it in a variable
     # call count_words to build the dictionary for the given file
@@ -100,4 +112,6 @@ def main():
 if __name__ == '__main__':
     main()
     filename = get_input()
-    count_words(filename)
+   # count_words(filename)
+    word_dict = count_words(filename)
+    report(word_dict)
