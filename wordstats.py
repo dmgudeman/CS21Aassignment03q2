@@ -62,17 +62,16 @@ def count_words (filename):
         for line in raw_file:
             for word in line.split():
                 word = word.lower()
-               # word = "".join(c for c in word
+                # word = "".join(c for c in word
                 #             if c not in string.punctuation)
                 word = ''.join(c for c in word if c.isalpha())
+                print(word)
 
-                if word in words:
-                    words[word]= words[word] + 1
-                else:
-                    words[word] = 1
+                if not word:
+                    break
 
-            if words[word] == '':
-                null_deleter = words.pop(word, None) # gets rid of null strings
+                words[word] = words.get(word, 0) + 1
+
     print(words)
     return words
 
@@ -94,9 +93,11 @@ def report(word_dict):
     longest_word = longest_word[:1]
     print("A longest word is '" + longest_word[0] + "'")
 
-    top_five = sorted(word_dict.items(), key=operator.itemgetter(1), reverse=True)
+    top_five = sorted(word_dict, key=word_dict.get, reverse=True)
+
     top_five = top_five[:5]
-    print(top_five)
+    for word in top_five:
+        print(word + ':', word_dict[word])
 
 def main():
     # get the input filename and save it in a variable
