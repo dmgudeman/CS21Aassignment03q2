@@ -1,16 +1,20 @@
 # -----------------------------------------------------------------------------
-# Name:        wordstats
-# Purpose:
+# Name:         wordstats
+# Purpose:      Counts and categorizes words in a text file
 #
-# Author:
-# Date:
+# Author:       David Gudeman
+# Date:         June 23, 2015
 # -----------------------------------------------------------------------------
 """
-Docstring: Enter your one-line summary here
+Receives text file from the user then counts the words, alphabetizes them
+to a new file and returns a longest word and the top 5 most frequent words
 
-and your detailed description
+Input: filename of a text file. Takes it from the keyboard
+Output: to display: a longest word and the top 5 most frequently used words
+        to a new file: an alphabetized lists of the words in the file and
+        how often they are used
+
 """
-import string
 # The following imports are needed for the draw cloud function.
 import tkinter
 import tkinter.font
@@ -54,25 +58,33 @@ def draw_cloud(input_count, min_length = 0):
 # Enter your own helper function definitions here
 
 def count_words (filename):
-    # build and return the dictionary for the given filename
-    words = {}
-    with open(filename, 'r', encoding='utf-8') as raw_file:
+    """
+    function accepts a filename as parameter, opens the file, reads
+    the file by line, coverts all characters to lowercase and returns only
+    alpha characters. It counts how many times a word is used in the text and
+    does not keep duplicates
 
-        for line in raw_file:
-            for word in line.split():
-                word = word.lower()
-                word = ''.join(c for c in word if c.isalpha())
+    parameter: filename
+    returns: dictionary with words as key and their frequency of use as value
+    """
+    word_dict = {}                 # initialize an empty dictionary
+    with open(filename, 'r', encoding='utf-8') as raw_file: # open input file
+
+        for line in raw_file:               # read the file by line
+            for word in line.split():       # parse line into words
+                word = word.lower()         # convert to lower case
+                word = ''.join(c for c in word if c.isalpha())  # alpha filter
                 if not word:
-                    break
-                words[word] = words.get(word, 0) + 1
-    return words
+                    break                   # break loop if char is not alpha
+                word_dict[word] = word_dict.get(word, 0) + 1 # tally frequency
+    return word_dict                        # return the dictionay
 
 def get_input():
     """
-    # Obtain the input from the user
-    # prompt the user for input until they enter a non-empty string
-    # return the string entered by the user
-     #
+    Obtain the input from the user
+    prompt the user for input until they enter a non-empty string
+    return the string entered by the user
+
     """
     filename = str(input('Please enter the name of your file:'))
     while filename == "":
@@ -80,28 +92,36 @@ def get_input():
     return filename
 
 def report(word_dict):
-    # report on various statistics based on the given word count dictionary
-    longest_word = sorted (word_dict, key=len, reverse=True)
-    longest_word = longest_word[:1]
-    print("\nA longest word is '" + longest_word[0] + "'")
+    """
+    takes in a dictionary of lowercase words and calculates the longest word,
+    the top five most frequently used words.  This data are returned to the
+    display. It alphabetizes the entire dictionary and writes this to the
+    file "out.txt".
 
-    print("\nThe top five most frequent words are:")
-    top_five = sorted(word_dict, key=word_dict.get, reverse=True)
-    top_five = top_five[:5]
-    for word in top_five:
+    parameter:  dictionary
+    returns:    longest word - to display
+                top five frequenlty used words - to display
+                an alphabetized list with frequency - to the file out.txt
+
+    """
+    longest_word = sorted (word_dict, key=len, reverse=True) # sort large -> s
+    longest_word = longest_word[:1]             # slice off a largest
+    print("\nA longest word is '" + longest_word[0] + "'") # to display
+
+    print("\nThe top five most frequent words are:") # context for data
+    top_five = sorted(word_dict, key=word_dict.get, reverse=True) # freq sort
+    top_five = top_five[:5]                     # slice off top five
+    for word in top_five:                       # iterate them to display
         print(word + ':', word_dict[word])
 
-    alphabetized = sorted(word_dict)
-    list2 = ''
-    for word in alphabetized:
+    alphabetized = sorted(word_dict)            # alphabetize the dictionary
+    list2 = ''                                  # intialize and empty list
+    for word in alphabetized:                   # iterate through list output
         combo_word = word + ": ", str(word_dict[word])
         list = ''.join(combo_word)
-        list2 += "\n " + list
-    print(list2)
-    print(type(list2))
-    with open('out.txt', 'w', encoding='utf-8') as my_file:
-           my_file.write(list2)
-        # alphabetized.write(combo_word)
+        list2 += "\n " + list      # prepare string of data formatted as column
+    with open('out.txt', 'w', encoding='utf-8') as my_file: # open output file
+        my_file.write(list2)        # write the string output file
 
 def main():
     # get the input filename and save it in a variable
@@ -117,4 +137,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-   # count_words(filename)
