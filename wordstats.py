@@ -58,21 +58,13 @@ def count_words (filename):
     words = {}
     with open(filename, 'r', encoding='utf-8') as raw_file:
 
-        #raw_text = raw_file.read()
         for line in raw_file:
             for word in line.split():
                 word = word.lower()
-                # word = "".join(c for c in word
-                #             if c not in string.punctuation)
                 word = ''.join(c for c in word if c.isalpha())
-                print(word)
-
                 if not word:
                     break
-
                 words[word] = words.get(word, 0) + 1
-
-    print(words)
     return words
 
 def get_input():
@@ -91,13 +83,25 @@ def report(word_dict):
     # report on various statistics based on the given word count dictionary
     longest_word = sorted (word_dict, key=len, reverse=True)
     longest_word = longest_word[:1]
-    print("A longest word is '" + longest_word[0] + "'")
+    print("\nA longest word is '" + longest_word[0] + "'")
 
+    print("\nThe top five most frequent words are:")
     top_five = sorted(word_dict, key=word_dict.get, reverse=True)
-
     top_five = top_five[:5]
     for word in top_five:
         print(word + ':', word_dict[word])
+
+    alphabetized = sorted(word_dict)
+    list2 = ''
+    for word in alphabetized:
+        combo_word = word + ": ", str(word_dict[word])
+        list = ''.join(combo_word)
+        list2 += "\n " + list
+    print(list2)
+    print(type(list2))
+    with open('out.txt', 'w', encoding='utf-8') as my_file:
+           my_file.write(list2)
+        # alphabetized.write(combo_word)
 
 def main():
     # get the input filename and save it in a variable
@@ -107,12 +111,10 @@ def main():
 
     # If you want to generate a word cloud, uncomment the line below.
     # draw_cloud(word_count)
-    print("hit there main")
-
+    filename = get_input()
+    word_dict = count_words(filename)
+    report(word_dict)
 
 if __name__ == '__main__':
     main()
-    filename = get_input()
    # count_words(filename)
-    word_dict = count_words(filename)
-    report(word_dict)
